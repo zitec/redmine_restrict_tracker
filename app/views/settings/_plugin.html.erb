@@ -1,0 +1,24 @@
+<% trackers = Tracker.select([:id, :name]).all %>
+
+<h2> Available trackers:</h2>
+<div>
+  <% trackers.each do |tracker| %>
+    <div><%= tracker.id %>: <%= tracker.name %></div>
+  <% end %>
+</div>
+<br />
+<h2> Add the ids as a comma separated list. </h2>
+
+<table>
+  <tr>
+    <td>Root node ids:</td>
+    <td><input type="text" name="root_nodes"></td>
+  </tr>
+  <% trackers.each do |tracker| %>
+    <tr>
+      <% input_name = tracker.name.downcase.split(' ').join('_') %>
+      <td><%= tracker.name %> parent ids:</td>
+      <td><input type="text" name="parents_for_<%= input_name %>"></td>
+    </tr>
+  <% end %>
+</table>

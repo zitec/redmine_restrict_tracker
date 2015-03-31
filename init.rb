@@ -17,4 +17,6 @@ Redmine::Plugin.register :redmine_restrict_tracker do
   version '0.0.1'
   url 'https://github.com/sdwolf/redmine_restrict_tracker'
   author_url 'http://www.zitec.com'
+
+  settings partial: 'settings/plugin'
 end
