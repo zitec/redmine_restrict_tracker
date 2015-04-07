@@ -12,13 +12,13 @@
 <table>
   <tr>
     <td>Root node ids:</td>
-    <td><input type="text" name="root_nodes"></td>
+    <td><input type="text" id="settings_root_nodes" name="settings[root_nodes]" value="<%= settings['root_nodes'] %>"></td>
   </tr>
   <% trackers.each do |tracker| %>
     <tr>
       <% input_name = tracker.name.downcase.split(' ').join('_') %>
       <td><%= tracker.name %> parent ids:</td>
-      <td><input type="text" name="parents_for_<%= input_name %>"></td>
+      <td><input type="text" id='settings_parents_for_<%= input_name %> ' name="settings[parents_for_<%= input_name %>]" value="<%= settings["parents_for_#{input_name}"] %>"></td>
     </tr>
   <% end %>
 </table>
