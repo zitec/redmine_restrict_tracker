@@ -1,4 +1,6 @@
-<% trackers = Tracker.select([:id, :name]).all %>
+<% trackers = Tracker.select([:id, :name]).all
+   settings = {} unless settings
+%>
 
 <h2> Available trackers:</h2>
 <div>
@@ -18,7 +20,9 @@
     <tr>
       <% input_name = tracker.name.downcase.split(' ').join('_') %>
       <td><%= tracker.name %> parent ids:</td>
-      <td><input type="text" id='settings_parents_for_<%= input_name %> ' name="settings[parents_for_<%= input_name %>]" value="<%= settings["parents_for_#{input_name}"] %>"></td>
+      <td>
+        <input type="text" id='settings_parents_for_<%= input_name %> ' name="settings[parents_for_<%= input_name %>]" value="<%= settings["parents_for_#{ input_name }"] %>">
+      </td>
     </tr>
   <% end %>
 </table>
