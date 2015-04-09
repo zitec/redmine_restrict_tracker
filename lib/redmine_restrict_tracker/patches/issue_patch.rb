@@ -30,7 +30,8 @@ module RedmineRestrictTracker
           setting_name = "parents_for_#{tracker_name.downcase.split(' ').join('_')}"
           possible_parent_trackers = Setting.plugin_redmine_restrict_tracker[setting_name]
             .split(',').map(&:to_i)
-          if (possible_parent_trackers.include?(tracker_id))
+          parent_tracker_id = Issue.where(id: parent_issue_id).pluck(:tracker_id).first
+          if (possible_parent_trackers.include?(parent_tracker_id))
             true
           else
             possible_parents = Tracker.where(id: possible_parent_trackers).pluck(:name).map(&:pluralize)
