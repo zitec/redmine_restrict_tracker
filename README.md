@@ -1,3 +1,3 @@
 # Redmine Restrict Tracker
 
-Restrict child trackers to a certain list.
+Restrict root and child trackers to a certain list.

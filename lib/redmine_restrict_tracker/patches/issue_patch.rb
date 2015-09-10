@@ -14,8 +14,8 @@ module RedmineRestrictTracker
         end
 
         def restrict_root
-          if (Setting.plugin_redmine_restrict_tracker[:root_nodes].split(',')
-              .map(&:to_i).include?(tracker_id))
+          if Setting.plugin_redmine_restrict_tracker[:root_nodes].split(',')
+              .map(&:to_i).include?(tracker_id)
             true
           else
             errors.add :base, "#{ tracker.name } can not be a root node, please assign a parent!"
