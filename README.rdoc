@@ -1,3 +1,0 @@
-= redmine_restrict_tracker
-
-Description goes here
