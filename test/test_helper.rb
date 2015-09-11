@@ -16,9 +16,24 @@ factories_folder = File.expand_path File.dirname(__FILE__) << '/factories/'
 FactoryGirl.definition_file_paths << factories_folder
 FactoryGirl.find_definitions
 
-# Including factoryGirl methods in test classes
+# Including FactoryGirl methods in test classes
+base = ActiveSupport::TestCase
 methods = FactoryGirl::Syntax::Methods
-classes = [ActiveSupport::TestCase]
-classes.each do |base|
-  base.send :include, methods unless base.included_modules.include? methods
+base.send :include, methods unless base.included_modules.include? methods
+
+# Including support modules
+Dir.glob(File.dirname(__FILE__) + '/support/*_support.rb').each do |file|
+  require file
+end
+
+# Including support for unit tests
+base = ActiveSupport::TestCase
+support = SettingsSupport
+base.send :include, support unless base.included_modules.include? support
+
+# Including supprot for functional tests
+base = ActionController::TestCase
+modules = [LoginSupport, SettingsSupport]
+modules.each do |support|
+  base.send :include, support unless base.included_modules.include? support
 end
