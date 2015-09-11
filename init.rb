@@ -6,7 +6,7 @@ ActionDispatch::Callbacks.to_prepare do
 end
 
 Redmine::Plugin.register :redmine_restrict_tracker do
-  name 'Redmine Restrict Tracker plugin'
+  name 'Restrict Tracker'
   author 'Zitec'
   description 'Restricts the root and children trackers'
   version '0.0.2'
