@@ -15,6 +15,7 @@ FactoryGirl.define do
     login 'user'
     type 'User'
     mail 'test@test.com'
+
     factory :admin do
       admin true
     end

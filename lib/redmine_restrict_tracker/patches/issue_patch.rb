@@ -4,12 +4,12 @@ module RedmineRestrictTracker
       def self.included(base)
         base.send :include, InstanceMethods
         base.class_eval do
-          before_save :restrict_tracker_type
+          before_save :restrict_tracker
         end
       end
 
       module InstanceMethods
-        def restrict_tracker_type
+        def restrict_tracker
           parent_issue_id ? restrict_parent : restrict_root
         end
 
@@ -34,7 +34,7 @@ module RedmineRestrictTracker
           else
             possible_parents = Tracker.where(id: possible_parent_trackers).pluck(:name).map(&:pluralize)
             if possible_parents.size == 0
-              errors.add :base, "#{ tracker_name.pluralize } can't be set as children!"
+              errors.add :base, "#{ tracker_name.pluralize } can not be set as children!"
               return false
             elsif possible_parents.size > 1
               parents_string = possible_parents[0..-2].join(', ') << " and " << possible_parents[-1]
