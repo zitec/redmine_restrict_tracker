@@ -63,7 +63,7 @@ class IssuePatchTest < ActiveSupport::TestCase
       "as children!"], errors[:base]
   end
 
-  test 'not creating child with the wrong tracker' do
+  test 'not creating child with the wrong tracker and one possible parent' do
     parent = build_issue_with @root_tracker_2
     parent.save!
     wrong_child = build_issue_with @first_child_tracker, parent
@@ -74,5 +74,19 @@ class IssuePatchTest < ActiveSupport::TestCase
     assert_not_nil errors[:base]
     assert_equal ["#{ @first_child_tracker.name.pluralize } can only be "\
       "children of #{ @root_tracker_1.name.pluralize }!"], errors[:base]
+  end
+
+  test 'not creating child with the wrong tracker and many possible parents' do
+    parent = build_issue_with @root_tracker_1
+    parent.save!
+    wrong_child = build_issue_with @second_child_tracker, parent
+    wrong_child.save
+    errors = wrong_child.errors.messages
+    assert_not_empty errors
+    assert_equal 1, errors.size
+    assert_not_nil errors[:base]
+    assert_equal ["#{ @second_child_tracker.name.pluralize } can only be "\
+      "children of #{ @root_tracker_2.name.pluralize } and "\
+      "#{ @first_child_tracker.name.pluralize }!"], errors[:base]
   end
 end

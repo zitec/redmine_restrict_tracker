@@ -29,7 +29,8 @@ module SettingsSupport
     hash = ActiveSupport::HashWithIndifferentAccess.new(
       root_nodes: [@root_tracker_1.id, @root_tracker_2.id].join(','),
       tracker_name(@first_child_tracker) => @root_tracker_1.id.to_s,
-      tracker_name(@second_child_tracker) => @first_child_tracker.id.to_s,
+      tracker_name(@second_child_tracker) => [@first_child_tracker.id,
+        @root_tracker_2.id].join(','),
       tracker_name(@always_root_tracker) => ''
     )
     Setting.plugin_redmine_restrict_tracker = hash
