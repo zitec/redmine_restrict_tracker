@@ -4,12 +4,12 @@ SimpleCov.start do
   add_group 'Libraries', 'lib'
   add_filter '/test/'
   add_filter 'init.rb'
-  root File.expand_path(File.dirname(__FILE__) + '/../')
+  root File.expand_path(File.dirname(__FILE__) << '/../')
   coverage_dir 'tmp/coverage'
 end
 
 # Load the Redmine helper
-require File.expand_path File.dirname(__FILE__) << '/../../../test/test_helper'
+require File.expand_path(File.dirname(__FILE__) << '/../../../test/test_helper')
 
 # Load factories
 factories_folder = File.expand_path File.dirname(__FILE__) << '/factories/'
@@ -22,7 +22,7 @@ methods = FactoryGirl::Syntax::Methods
 base.send :include, methods unless base.included_modules.include? methods
 
 # Including support modules
-Dir.glob(File.dirname(__FILE__) + '/support/*_support.rb').each do |file|
+Dir.glob(File.dirname(__FILE__) << '/support/*_support.rb').each do |file|
   require file
 end
 

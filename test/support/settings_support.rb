@@ -15,7 +15,9 @@ module SettingsSupport
     issue
   end
 
-  def create_base_settings
+  def create_base_setup
+    @author = create :user
+    @priority = create :issue_priority
     @status = create :issue_status
     @project = create :project
     @root_tracker_1 = create :tracker, default_status_id: @status.id
@@ -26,6 +28,10 @@ module SettingsSupport
     @project.trackers << [@root_tracker_1, @root_tracker_2,
     @first_child_tracker, @second_child_tracker, @always_root_tracker]
     @project.save!
+  end
+
+  def create_base_setup_with_settings
+    create_base_setup
     hash = ActiveSupport::HashWithIndifferentAccess.new(
       root_nodes: [@root_tracker_1.id, @root_tracker_2.id].join(','),
       tracker_name(@first_child_tracker) => @root_tracker_1.id.to_s,
