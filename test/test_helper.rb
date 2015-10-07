@@ -28,12 +28,12 @@ end
 
 # Including support for unit tests
 base = ActiveSupport::TestCase
-support = SettingsSupport
+support = SetupSupport
 base.send :include, support unless base.included_modules.include? support
 
 # Including supprot for functional tests
 base = ActionController::TestCase
-modules = [LoginSupport, SettingsSupport]
+modules = [LoginSupport, SetupSupport]
 modules.each do |support|
   base.send :include, support unless base.included_modules.include? support
 end
