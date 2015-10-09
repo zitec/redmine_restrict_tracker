@@ -1,11 +1,11 @@
 FactoryGirl.define do
   factory :project do
-    sequence(:name) {|count| "Project #{ count }" }
-    sequence(:description) {|count| "Description #{ count }" }
-    sequence(:homepage) {|count| "http://user#{ count }.zitec.ro/" }
-    sequence(:identifier) {|count| "user_#{ count }" }
+    sequence(:name) {|count| "Sample Name #{ count }" }
+    sequence(:description) {|count| "Sample Description #{ count }" }
+    sequence(:homepage) {|count| "http://sample-homepage-#{ count }.example.com/" }
+    sequence(:identifier) {|count| "sample-user-#{ count }" }
     is_public true
-    created_on '2006-07-19 19:13:59 +02:00'
-    updated_on '2006-07-19 22:53:01 +02:00'
+    created_on 1.day.ago.to_s(:db)
+    updated_on 1.day.ago.to_s(:db)
   end
 end
