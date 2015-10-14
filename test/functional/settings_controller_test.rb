@@ -2,6 +2,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class SettingsControllerTest < ActionController::TestCase
   test 'GET #plugin without initial settigns' do
+    login_as_admin
     create_base_setup_without_settings
     data = { id: 'redmine_restrict_tracker' }
     get :plugin, data
@@ -9,6 +10,7 @@ class SettingsControllerTest < ActionController::TestCase
   end
 
   test 'GET #plugin with initial settigns disabled' do
+    login_as_admin
     create_base_setup_with_disabled_settings
     data = { id: 'redmine_restrict_tracker' }
     get :plugin, data
@@ -16,6 +18,7 @@ class SettingsControllerTest < ActionController::TestCase
   end
 
   test 'GET #plugin with initial settigns enabled' do
+    login_as_admin
     create_base_setup_with_enabled_settings
     data = { id: 'redmine_restrict_tracker' }
     get :plugin, data

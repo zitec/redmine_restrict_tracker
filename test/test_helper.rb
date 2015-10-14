@@ -12,6 +12,9 @@ end
 # Load the Redmine helper
 require File.expand_path(File.dirname(__FILE__) << '/../../../test/test_helper')
 
+# Show the entire stack trace on error (a real life saver!)
+Rails.backtrace_cleaner.remove_silencers!
+
 # Load factories
 factories_folder = File.expand_path File.dirname(__FILE__) << '/factories/'
 FactoryGirl.definition_file_paths << factories_folder
