@@ -58,4 +58,28 @@ module SetupSupport
   def create_base_setup_with_disabled_settings
     create_base_setup_with_settings active: false
   end
+
+  def expect_root_issue_to_be_created
+    issue = build_issue_with @root_tracker_1
+    issue.save
+    expect(issue).to be_valid
+  end
+
+  def expect_child_issue_to_be_created
+    parent = build_issue_with @root_tracker_1
+    parent.save!
+    child = build_issue_with @first_child_tracker, parent
+    child.save
+    expect(child).to be_valid
+  end
+
+  def expect_child_of_child_to_be_created
+    parent = build_issue_with @root_tracker_1
+    parent.save!
+    first_child = build_issue_with @first_child_tracker, parent
+    first_child.save!
+    second_child = build_issue_with @second_child_tracker, first_child
+    second_child.save
+    expect(second_child).to be_valid
+  end
 end
