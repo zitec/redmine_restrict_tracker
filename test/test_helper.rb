@@ -2,6 +2,7 @@
 require 'simplecov'
 SimpleCov.start do
   add_group 'Libraries', 'lib'
+  add_group 'Patches', 'lib/redmine_restrict_tracker/patches'
   add_filter '/test/'
   add_filter 'init.rb'
   root File.expand_path(File.dirname(__FILE__) << '/../')

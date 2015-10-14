@@ -1,37 +1,9 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class IssuePatchTest < ActiveSupport::TestCase
-  def expect_root_issue_to_be_created
-    issue = build_issue_with @root_tracker_1
-    issue.save
-    assert issue.valid?
-  end
-
-  def expect_child_issue_to_be_created
-    parent = build_issue_with @root_tracker_1
-    parent.save!
-    child = build_issue_with @first_child_tracker, parent
-    child.save
-    assert child.valid?
-  end
-
-  def expect_child_of_child_to_be_created
-    parent = build_issue_with @root_tracker_1
-    parent.save!
-    first_child = build_issue_with @first_child_tracker, parent
-    first_child.save!
-    second_child = build_issue_with @second_child_tracker, first_child
-    second_child.save
-    assert second_child.valid?
-  end
-
   test 'Issue is patched with RedmineRestrictTracker::Patches::IssuePatch' do
     patch = RedmineRestrictTracker::Patches::IssuePatch
     assert_includes Issue.included_modules, patch
-    %i(restrict_tracker can_create_root? can_create_child?).each do |method|
-      assert_includes Issue.instance_methods, method,
-        "#{ method } method not included in Issue"
-    end
   end
 
   # Without plugin settings defined
@@ -146,5 +118,31 @@ class IssuePatchTest < ActiveSupport::TestCase
     assert_equal ["#{ @second_child_tracker.name.pluralize } can only be "\
       "children of #{ @root_tracker_2.name.pluralize } and "\
       "#{ @first_child_tracker.name.pluralize }!"], errors[:base]
+  end
+
+  private
+
+  def expect_root_issue_to_be_created
+    issue = build_issue_with @root_tracker_1
+    issue.save
+    assert issue.valid?
+  end
+
+  def expect_child_issue_to_be_created
+    parent = build_issue_with @root_tracker_1
+    parent.save!
+    child = build_issue_with @first_child_tracker, parent
+    child.save
+    assert child.valid?
+  end
+
+  def expect_child_of_child_to_be_created
+    parent = build_issue_with @root_tracker_1
+    parent.save!
+    first_child = build_issue_with @first_child_tracker, parent
+    first_child.save!
+    second_child = build_issue_with @second_child_tracker, first_child
+    second_child.save
+    assert second_child.valid?
   end
 end

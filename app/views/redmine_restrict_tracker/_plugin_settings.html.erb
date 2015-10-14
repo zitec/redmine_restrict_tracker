@@ -1,5 +1,5 @@
 <% trackers = Tracker.select([:id, :name])
-   settings = {} unless settings %>
+   settings = {} if !settings || settings.blank? %>
 <h2> Available trackers: </h2>
 <div>
   <% trackers.each do |tracker| %>
@@ -29,7 +29,7 @@
         <input type="hidden" name="settings[restrict_root]" value="0">
         <input type="checkbox" id="settings_restrict_root" value="1"
           name="settings[restrict_root]"
-          <%= settings[:restrict_root] == '1' ? 'checked="checked"' : '' %> >
+          <%= settings['restrict_root'] == '1' ? 'checked="checked"' : '' %>>
       </td>
     </tr>
     <% trackers.each do |tracker| %>
@@ -42,12 +42,9 @@
             value="<%= settings["parents_for_#{ input_name }"] %>">
         </td>
         <td>
-          <input type="hidden" name="settings[restrict_<%= input_name %>]"
-            value="0">
           <input type="checkbox" id="settings_restrict_<%= input_name %>"
             name="settings[restrict_<%= input_name %>]" value="1"
-            <%= settings['restrict_'<< input_name] == '1' ? 'checked="checked"' : '' %>
-            >
+            <%= settings["restrict_#{ input_name }"] == '1' ? 'checked="checked"' : '' %>>
         </td>
       </tr>
     <% end %>

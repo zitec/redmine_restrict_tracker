@@ -32,30 +32,30 @@ module SetupSupport
 
   def create_base_setup_without_settings
     create_base_setup
-    Setting.plugin_redmine_restrict_tracker = ActiveSupport::HashWithIndifferentAccess.new
+    Setting.plugin_redmine_restrict_tracker = nil
   end
 
-  def create_base_setup_with_settings(active: '1')
+  def create_base_setup_with_settings(active: true)
     create_base_setup
-    hash = ActiveSupport::HashWithIndifferentAccess.new(
-      root_nodes: [@root_tracker_1.id, @root_tracker_2.id].join(','),
-      restrict_root: active,
+    hash = {
+      'root_nodes' => [@root_tracker_1.id, @root_tracker_2.id].join(','),
+      'restrict_root' => active ? '1' : nil,
       tracker_name(@first_child_tracker) => @root_tracker_1.id.to_s,
-      restrict_name(@first_child_tracker) => active,
+      restrict_name(@first_child_tracker) => active ? '1' : nil,
       tracker_name(@second_child_tracker) => [@first_child_tracker.id,
         @root_tracker_2.id].join(','),
-      restrict_name(@second_child_tracker) => active,
+      restrict_name(@second_child_tracker) => active ? '1' : nil,
       tracker_name(@no_parent_tracker) => '',
-      restrict_name(@no_parent_tracker) => active
-    )
+      restrict_name(@no_parent_tracker) => active ? '1' : nil
+    }
     Setting.plugin_redmine_restrict_tracker = hash
   end
 
   def create_base_setup_with_enabled_settings
-    create_base_setup_with_settings active: '1'
+    create_base_setup_with_settings active: true
   end
 
   def create_base_setup_with_disabled_settings
-    create_base_setup_with_settings active: '0'
+    create_base_setup_with_settings active: false
   end
 end

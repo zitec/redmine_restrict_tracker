@@ -10,13 +10,19 @@ module RedmineRestrictTracker
 
       module InstanceMethods
         def restrict_tracker
-          parent_issue_id ? can_create_child? : can_create_root?
+          settings = Setting.plugin_redmine_restrict_tracker
+          return true if !settings || settings.blank?
+          if parent_issue_id
+            can_create_child_with? settings
+          else
+            can_create_root_with? settings
+          end
         end
 
-        def can_create_root?
-          setting_active = Setting.plugin_redmine_restrict_tracker[:restrict_root]
-          return true if !setting_active || setting_active == '0'
-          node_setting = Setting.plugin_redmine_restrict_tracker[:root_nodes]
+        def can_create_root_with?(settings)
+          setting_active = settings['restrict_root']
+          return true if !setting_active
+          node_setting = settings['root_nodes']
           root_node_ids = node_setting.split(',').map(&:to_i)
           if root_node_ids.include?(tracker_id)
             true
@@ -26,13 +32,13 @@ module RedmineRestrictTracker
           end
         end
 
-        def can_create_child?
+        def can_create_child_with?(settings)
           tracker_name = tracker.name
           active_name = "restrict_#{ tracker_name.downcase.split(' ').join('_') }"
-          setting_active = Setting.plugin_redmine_restrict_tracker[active_name]
-          return true if !setting_active || setting_active == '0'
+          setting_active = settings[active_name]
+          return true if !setting_active
           setting_name = "parents_for_#{ tracker_name.downcase.split(' ').join('_') }"
-          node_setting = Setting.plugin_redmine_restrict_tracker[setting_name]
+          node_setting = settings[setting_name]
           possible_parent_trackers = node_setting.split(',').map(&:to_i)
           parent_tracker_id = Issue.where(id: parent_issue_id).pluck(:tracker_id).first
           if (possible_parent_trackers.include?(parent_tracker_id))
