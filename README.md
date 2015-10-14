@@ -6,7 +6,7 @@ Restrict root and child trackers to a certain list.
 
 Clone the repository in the `plugins` direcotry and restart redmine:
 ```
-git clone git@github.com:sdwolf/redmine_restrict_tracker.git
+git clone git@github.com:ZitecCOM/redmine_restrict_tracker.git
 ```
 
 # Configure
