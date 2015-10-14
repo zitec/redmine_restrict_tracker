@@ -20,17 +20,17 @@ separated by commas and press "Apply".
 
 Make sure you have the testing gems plugin:
 ```
-git clone git@github.com:sdwolf/redmine_testing_gems.git
+git clone git@github.com:ZitecCOM/redmine_testing_gems.git
 bundle install
 ```
 
-Then run
+Then run:
 ```
-rake redmine:plugins:test NAME=redmine_restrict_tracker
+rake redmine:plugins:spec RAILS_ENV=test NAME=redmine_restrict_tracker
 ```
 
 To view test coverage go to `plugins/redmine_restrict_tracker/tmp/coverage`
-and open `index.html` in a browser
+and open `index.html` in a browser.
 
 ## License
 
