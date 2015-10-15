@@ -17,7 +17,7 @@ Redmine::Plugin.register :redmine_restrict_tracker do
 end
 
 Rails.application.config.after_initialize do
-  test_dependencies = { redmine_testing_gems: '1.1.0' }
+  test_dependencies = { redmine_testing_gems: '1.1.1' }
   restrict_tracker = Redmine::Plugin.find :redmine_restrict_tracker
   check_dependencies = proc do |plugin, version|
     begin
