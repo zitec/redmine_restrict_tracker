@@ -1,0 +1,52 @@
+<% trackers = Tracker.select([:id, :name])
+   settings = {} if !settings || settings.blank? %>
+<h2> Available trackers: </h2>
+<div>
+  <% trackers.each do |tracker| %>
+    <div><%= tracker.id %>: <%= tracker.name %></div>
+  <% end %>
+</div>
+<br />
+<h3> Add the tracker ids as a comma separated list. </h3>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Values</th>
+      <th>Active</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Root node ids:
+      </td>
+      <td>
+        <input type="text" id="settings_root_nodes" name="settings[root_nodes]"
+          value="<%= settings['root_nodes'] %>">
+      </td>
+      <td>
+        <input type="hidden" name="settings[restrict_root]" value="0">
+        <input type="checkbox" id="settings_restrict_root" value="1"
+          name="settings[restrict_root]"
+          <%= settings['restrict_root'] == '1' ? 'checked="checked"' : '' %>>
+      </td>
+    </tr>
+    <% trackers.each do |tracker| %>
+      <tr>
+        <% input_name = tracker.name.downcase.split(' ').join('_') %>
+        <td><%= tracker.name %> parent ids:</td>
+        <td>
+          <input type="text" id='settings_parents_for_<%= input_name %> '
+            name="settings[parents_for_<%= input_name %>]"
+            value="<%= settings["parents_for_#{ input_name }"] %>">
+        </td>
+        <td>
+          <input type="checkbox" id="settings_restrict_<%= input_name %>"
+            name="settings[restrict_<%= input_name %>]" value="1"
+            <%= settings["restrict_#{ input_name }"] == '1' ? 'checked="checked"' : '' %>>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
