@@ -9,7 +9,7 @@ Redmine::Plugin.register :redmine_restrict_tracker do
   name 'Restrict Tracker'
   author 'Zitec'
   description 'Restricts the root and child trackers'
-  version '1.0.0'
+  version '0.2.0'
   url 'https://github.com/ZitecCOM/redmine_restrict_tracker'
   author_url 'http://www.zitec.com'
   requires_redmine version_or_higher: '3.1.1'
