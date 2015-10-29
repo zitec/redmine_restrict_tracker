@@ -11,7 +11,7 @@ class ParentTasksController < ApplicationController
       scope = scope.where('issues.tracker_id IN (?)', @allowed_trackers)
     end
     if query.match(/\A#?(\d+)\z/)
-      @issues = scope.where(id: $1.to_i)
+      @issues = scope.where('CONVERT(issues.id, char) LIKE ?', "%#{$1}%")
     else
       @issues = scope.where('LOWER(issues.subject) LIKE LOWER(?)', "%#{query}%")
         .order('issues.id DESC').limit(10).to_a
