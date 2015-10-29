@@ -4,8 +4,8 @@ class ParentTasksController < ApplicationController
   def parents
     query = (params[:q] || params[:term]).to_s.strip
     render json: [] and return unless query.present?
-    scope = Issue.cross_project_scope(@project, params[:scope]).visible
-      .joins(:status)
+    scope = Issue.includes(:tracker).cross_project_scope(@project, params[:scope])
+      .visible.joins(:status)
       .select(:id, :subject, :tracker_id, :status_id, 'issue_statuses.name')
     if @allowed_trackers
       scope = scope.where('issues.tracker_id IN (?)', @allowed_trackers)
