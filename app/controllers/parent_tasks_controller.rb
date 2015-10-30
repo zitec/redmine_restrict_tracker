@@ -3,18 +3,18 @@ class ParentTasksController < ApplicationController
 
   def parents
     query = (params[:q] || params[:term]).to_s.strip
-    render json: [] and return unless query.present?
-    scope = Issue.cross_project_scope(@project, params[:scope]).visible
-      .joins(:status)
+    scope = Issue.includes(:tracker).cross_project_scope(@project, params[:scope])
+      .visible.joins(:status).order('issues.id DESC').limit(20)
       .select(:id, :subject, :tracker_id, :status_id, 'issue_statuses.name')
     if @allowed_trackers
       scope = scope.where('issues.tracker_id IN (?)', @allowed_trackers)
     end
-    if query.match(/\A#?(\d+)\z/)
+    if query.blank?
+      @issues = scope.to_a
+    elsif query.match(/\A#?(\d+)\z/)
       @issues = scope.where('CONVERT(issues.id, char) LIKE ?', "%#{$1}%")
     else
       @issues = scope.where('LOWER(issues.subject) LIKE LOWER(?)', "%#{query}%")
-        .order('issues.id DESC').limit(10).to_a
     end
     render json: @issues.group_by { |issue| issue.tracker.name}
   end

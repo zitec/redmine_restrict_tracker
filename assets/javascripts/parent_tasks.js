@@ -65,7 +65,7 @@ function addS2ToParentTaskField() {
     allowClear: true,
     width: '200',
     dropdownAutoWidth: true,
-    minimumInputLength: 1,
+    minimumInputLength: 0,
     placeholder: 'None'
   })
 }
