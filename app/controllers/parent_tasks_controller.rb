@@ -16,7 +16,7 @@ class ParentTasksController < ApplicationController
     else
       @issues = scope.where('LOWER(issues.subject) LIKE LOWER(?)', "%#{query}%")
     end
-    render json: @issues.group_by { |issue| issue.tracker.name}
+    render json: @issues.group_by { |issue| issue.tracker.name }
   end
 
   private
@@ -40,7 +40,10 @@ class ParentTasksController < ApplicationController
       restrict_setting = settings[restricted_name]
       if restrict_setting && restrict_setting == '1'
         parents_name = "parents_for_#{tracker_name.downcase.split(' ').join('_')}"
-        @allowed_trackers = settings[parents_name]
+        tracker_settings = settings[parents_name]
+        if tracker_settings
+          @allowed_trackers = tracker_settings.split(',').map(&:to_i)
+        end
       end
     end
   end
