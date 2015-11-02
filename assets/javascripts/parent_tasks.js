@@ -12,7 +12,9 @@ $(document).ready(function(){
 function addS2ToParentTaskField() {
   var parentTaskField = $('#issue_parent_issue_id');
   var parentTask = parentTaskField.val();
-  var issueFormAction = $('#issue-form').attr('action').split('/')
+  var issueForm = $('#issue-form');
+  if (issueForm.length === 0) { return; }
+  var issueFormAction = issueForm.attr('action').split('/')
   var issueId = issueFormAction[issueFormAction.length -1];
   var projectId = $('#issue_project_id').val();
   var projectIdentifier = null;
