@@ -33,7 +33,7 @@ class ParentTasksController < ApplicationController
     @project ||= @issue.project
     settings = Setting.plugin_redmine_restrict_tracker
     if settings.present?
-      tracker_id = params[:tracker_id] || issue.tracker_id
+      tracker_id = params[:tracker_id] || @issue.tracker_id
       tracker = Tracker.where(id: tracker_id).first or render_404
       tracker_name = tracker.name
       restricted_name = "restrict_#{tracker_name.downcase.split(' ').join('_')}"
