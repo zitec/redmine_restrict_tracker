@@ -9,6 +9,20 @@ module RedmineRestrictTracker
       end
 
       module InstanceMethods
+        def can_have_children?
+          settings = Setting.plugin_redmine_restrict_tracker
+          return true if !settings || settings.blank?
+          settings.each do |key, value|
+            next if ['root_nodes', 'restrict_root'].include?(key)
+            return true if key =~ /^restrict_.+$/ && value != '1'
+            if key =~ /^parents_for_.+$/
+              id_list = value.split(',').map(&:to_i)
+              return true if id_list.include?(tracker_id)
+            end
+          end
+          return false
+        end
+
         def restrict_tracker
           settings = Setting.plugin_redmine_restrict_tracker
           return true if !settings || settings.blank?
