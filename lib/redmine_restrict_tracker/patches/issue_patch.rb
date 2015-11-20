@@ -23,6 +23,32 @@ module RedmineRestrictTracker
           return false
         end
 
+        def available_children
+          settings = Setting.plugin_redmine_restrict_tracker
+          return [] if !settings || settings.blank?
+          settings.reduce([]) do |total, element|
+            key = element[0]
+            value = element[1]
+            if ['root_nodes', 'restrict_root'].include?(key)
+              total
+            else
+              if key =~ /^restrict_.+$/ && value != '1'
+                total
+              else
+                if key =~ /^parents_for_.+$/
+                  id_list = value.split(',').map(&:to_i)
+                  if id_list.include?(tracker_id)
+                    total << key[12..-1].split('_').map(&:capitalize).join(' ')
+                  end
+                  total
+                else
+                  total
+                end
+              end
+            end
+          end
+        end
+
         def restrict_tracker
           settings = Setting.plugin_redmine_restrict_tracker
           return true if !settings || settings.blank?
