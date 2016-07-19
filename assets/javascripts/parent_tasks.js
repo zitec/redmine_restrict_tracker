@@ -10,8 +10,10 @@ $(document).ready(function(){
 });
 
 function addS2ToParentTaskField() {
-  var parentTaskField = $('#issue_parent_issue_id');
+  parentTaskField = $('#issue_parent_issue_id')
   var parentTask = parentTaskField.val();
+  parentTaskField.replaceWith("<select id='issue_parent_issue_id' name='issue[parent_issue_id]'></select>")
+
   var issueForm = $('#issue-form');
   if (issueForm.length === 0) { return; }
   var issueFormAction = issueForm.attr('action').split('/')
@@ -21,22 +23,24 @@ function addS2ToParentTaskField() {
   if (projectId === undefined) {
     projectIdentifier = window.location.pathname.split('/')[2];
   }
-  parentTaskField.select2({
+
+  var $element = $("#issue_parent_issue_id").select2({
     ajax: {
       url: '/autocomplete/parents',
       dataType: 'json',
-      quietMillis: 250,
+      delay: 250,
+      minimumInputLength: 2,
       data: function (params) {
         return {
           issue_id: issueId,
           tracker_id: $('#issue_tracker_id').val(),
           project_id: projectId,
           project_identifier: projectIdentifier,
-          term: params,
+          term: params.term,
           scope: 'tree'
         };
       },
-      results: function (data, page) {
+      processResults: function (data, params) {
         var myResults = [];
         $.each(data, function (index, item) {
             var issues = [];
@@ -55,19 +59,40 @@ function addS2ToParentTaskField() {
       },
       cache: true
     },
-    initSelection: function(element, callback) {
-      callback({id: parentTask, text: parentTask });
-    },
-    formatResult: function(item) {
+    templateResult : function(item) {
+      if (item.placeholder) return item.placeholder;
       return item.text;
     },
-    formatSelection: function(item) {
+    templateSelection : function(item) {
+      if (item.placeholder) return item.placeholder;
       return item.id;
     },
+    escapeMarkup: function(m) {
+      // Do not escape HTML in the select options text
+      return m;
+    },
     allowClear: true,
+    placeholder: "None",
     width: '200',
     dropdownAutoWidth: true,
-    minimumInputLength: 0,
-    placeholder: 'None'
-  })
+    minimumInputLength: 0
+  }).on("select2:unselecting", function(e) {
+    $(this).data('state', 'unselected');
+  }).on("select2:open", function(e) {
+    if ($(this).data('state') === 'unselected') {
+        $(this).removeData('state');
+        $element.find('option').replaceWith('<option value=""></option>').trigger("change")
+
+        var self = $(this);
+        setTimeout(function() {
+            self.select2('close');
+        }, 1);
+    }
+  });
+
+  if (parentTask) {
+    var option = new Option(parentTask, parentTask, true, true);
+    // Append it to the select
+    $element.append(option).trigger("change");
+  }
 }
