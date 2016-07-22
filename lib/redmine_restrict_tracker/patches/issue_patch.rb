@@ -10,9 +10,11 @@ module RedmineRestrictTracker
 
       module InstanceMethods
         def can_have_children?
-          settings = Setting.plugin_redmine_restrict_tracker
-          return true if !settings || settings.blank?
-          settings.each do |key, value|
+          @settings = Setting.plugin_redmine_restrict_tracker
+          return true if !@settings || @settings.blank?
+
+          @available_trackers = self.allowed_target_trackers.pluck(:name).to_a.map(&:downcase)
+          @settings.each do |key, value|
             next if ['root_nodes', 'restrict_root'].include?(key)
             return true if key =~ /^restrict_.+$/ && value != '1'
             if key =~ /^parents_for_.+$/
@@ -24,9 +26,11 @@ module RedmineRestrictTracker
         end
 
         def available_children
-          settings = Setting.plugin_redmine_restrict_tracker
-          return [] if !settings || settings.blank?
-          settings.reduce([]) do |total, element|
+          @settings = Setting.plugin_redmine_restrict_tracker unless @settings
+          return [] if !@settings || @settings.blank?
+
+          @available_trackers = self.allowed_target_trackers.pluck(:name).to_a.map(&:downcase) unless @available_trackers
+          @settings.reduce([]) do |total, element|
             key = element[0]
             value = element[1]
             if ['root_nodes', 'restrict_root'].include?(key)
@@ -38,7 +42,8 @@ module RedmineRestrictTracker
                 if key =~ /^parents_for_.+$/
                   id_list = value.split(',').map(&:to_i)
                   if id_list.include?(tracker_id)
-                    total << key[12..-1].split('_').map(&:capitalize).join(' ')
+                    tracker_name = key[12..-1].split('_').map(&:capitalize).join(' ')
+                    total << tracker_name if @available_trackers.include?(tracker_name.downcase)
                   end
                   total
                 else
@@ -46,6 +51,7 @@ module RedmineRestrictTracker
                 end
               end
             end
+
           end
         end
 
