@@ -10,12 +10,13 @@ $(document).ready(function(){
 });
 
 function addS2ToParentTaskField() {
+  var issueForm = $('#issue-form');
+  if (issueForm.length === 0) { return; }
+
   parentTaskField = $('#issue_parent_issue_id')
   var parentTask = parentTaskField.val();
   parentTaskField.replaceWith("<select id='issue_parent_issue_id' name='issue[parent_issue_id]'></select>")
 
-  var issueForm = $('#issue-form');
-  if (issueForm.length === 0) { return; }
   var issueFormAction = issueForm.attr('action').split('/')
   var issueId = issueFormAction[issueFormAction.length -1];
   var projectId = $('#issue_project_id').val();
