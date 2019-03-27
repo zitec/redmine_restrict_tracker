@@ -1,4 +1,4 @@
-ActionDispatch::Callbacks.to_prepare do
+ActiveSupport::Reloader.to_prepare do
   paths = '/lib/redmine_restrict_tracker/{patches/*_patch,hooks/*_hook}.rb'
   Dir.glob(File.dirname(__FILE__) << paths).each do |file|
     require_dependency file
@@ -9,10 +9,10 @@ Redmine::Plugin.register :redmine_restrict_tracker do
   name 'Restrict Tracker'
   author 'Zitec'
   description 'Restricts the root and child trackers'
-  version '0.2.4'
-  url 'https://github.com/ZitecCOM/redmine_restrict_tracker'
-  author_url 'http://www.zitec.com'
-  requires_redmine version_or_higher: '3.1.1'
+  version '0.3.0'
+  url 'https://github.com/zitec/redmine_restrict_tracker'
+  author_url 'https://www.zitec.com'
+  requires_redmine version_or_higher: '4.0.0'
   settings partial: 'redmine_restrict_tracker/plugin_settings'
 end
 
