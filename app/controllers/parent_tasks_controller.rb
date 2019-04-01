@@ -1,5 +1,5 @@
 class ParentTasksController < ApplicationController
-  before_filter :find_issue_and_project
+  before_action :find_issue_and_project
 
   def parents
     query = (params[:q] || params[:term]).to_s.strip
